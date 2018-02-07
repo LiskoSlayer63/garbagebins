@@ -1,0 +1,13 @@
+[
+{
+  "modid": "trashcansreborn",
+  "name": "Garbage Bins",
+  "description": "Simple trashcans for items and fluids.",
+  "version": "1.1.0",
+  "mcversion": "1.12.2",
+  "authorList": [
+	"LizNet" 
+  ],
+  "credits": "Thanks to Gigabit101 for the source code of this project."
+}
+]
