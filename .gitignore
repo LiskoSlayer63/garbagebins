@@ -1,1 +1,8 @@
-Talismans 2.iml
+/.gradle/
+/bin/
+/run/
+/build/
+openCmd.bat
+*.launch
+.project
+.classpath
