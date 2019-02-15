@@ -31,6 +31,7 @@ public class GuiTrashcan extends GuiContainer
 	protected void drawGuiContainerForegroundLayer(int p_146979_1_, int p_146979_2_) 
 	{
 		String name = I18n.translateToLocal("tile.trashcan.name");
+
 		this.fontRenderer.drawString(name, this.xSize / 2 - 10 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
 		this.fontRenderer.drawString(I18n.translateToLocalFormatted("container.inventory", new Object[0]), 8, this.ySize - 115 + 2, 4210752);
 

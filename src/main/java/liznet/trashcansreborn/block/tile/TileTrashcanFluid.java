@@ -13,20 +13,20 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileTrashcanFluid extends TileEntity implements IFluidTank, ITickable
 {
-	public FluidTank tank = new FluidTank(1000);
+	public FluidTank tank = new FluidTank(1000000);
 	
 	@Override
 	public void update() 
 	{
-		if(this.getFluidAmount() > 0)
-			this.drain(this.getFluidAmount(), true);
+		if(getFluidAmount() > 0)
+			drain(getFluidAmount(), true);
 	}
 	
 	@Override
 	public boolean hasCapability(final Capability<?> capability, final EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return true;
-		return super.hasCapability(capability, facing);
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -59,7 +59,7 @@ public class TileTrashcanFluid extends TileEntity implements IFluidTank, ITickab
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
-		return tank.fill(resource, doFill);
+		return resource.amount;
 	}
 
 	@Override

@@ -12,11 +12,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockMod extends BlockContainer {
-
 	public BlockMod() {
 		super(Material.IRON);
-		setCreativeTab(CreativeTabs.MISC);
+		setCreativeTab(CreativeTabs.DECORATIONS);
 		setHardness(2.0F);
+	}
+	
+	public Class<? extends TileEntity> getTileEntityClass() {
+		return null;
 	}
 
 	@Override

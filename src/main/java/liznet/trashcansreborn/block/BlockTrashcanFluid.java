@@ -13,13 +13,17 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
 public class BlockTrashcanFluid extends BlockMod
-{
-	
+{	
 	public BlockTrashcanFluid() 
 	{
 		super();
-		setUnlocalizedName("trashcanfluid");
 		setRegistryName("trashcanfluid");
+		setTranslationKey("trashcanfluid");
+	}
+	
+	@Override
+	public Class<? extends TileEntity> getTileEntityClass(){
+		return TileTrashcanFluid.class;
 	}
 	
 	@Override

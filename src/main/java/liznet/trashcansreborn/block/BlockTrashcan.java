@@ -17,8 +17,13 @@ public class BlockTrashcan extends BlockMod
 	public BlockTrashcan() 
 	{
 		super();
-		setUnlocalizedName("trashcan");
 		setRegistryName("trashcan");
+		setTranslationKey("trashcan");
+	}
+	
+	@Override
+	public Class<? extends TileEntity> getTileEntityClass(){
+		return TileTrashcan.class;
 	}
 	
 	@Override

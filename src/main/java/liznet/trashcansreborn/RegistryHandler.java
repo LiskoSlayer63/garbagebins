@@ -2,8 +2,7 @@ package liznet.trashcansreborn;
 
 import com.google.common.base.Preconditions;
 
-import liznet.trashcansreborn.block.tile.TileTrashcan;
-import liznet.trashcansreborn.block.tile.TileTrashcanFluid;
+import liznet.trashcansreborn.block.BlockMod;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -38,13 +37,11 @@ public class RegistryHandler {
 		};
 
 		for (final ItemBlock item : items) {
-			final Block block = item.getBlock();
+			final BlockMod block = (BlockMod) item.getBlock();
 			final ResourceLocation registryName = Preconditions.checkNotNull(block.getRegistryName(), "Block %s has null registry name", block);
 			registry.register(item.setRegistryName(registryName));
+			GameRegistry.registerTileEntity(block.getTileEntityClass(), registryName);
 		}
-
-		GameRegistry.registerTileEntity(TileTrashcan.class, "tiletrashcan");	
-		GameRegistry.registerTileEntity(TileTrashcanFluid.class, "tiletrashcanfluid");
 		
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT){
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(TrashCansReborn.trashcan), 0, new ModelResourceLocation(TrashCansReborn.trashcan.getRegistryName(), "inventory"));

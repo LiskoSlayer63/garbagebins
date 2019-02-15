@@ -20,22 +20,22 @@ public class TileTrashcan extends TileEntity implements IInventory, ITickable
 	@Override
 	public void update() 
 	{
-		if(this.getStackInSlot(0) != null)
-			this.removeStackFromSlot(0);
+		if(!isEmpty())
+			clear();
 	}
 	
 	@Override
 	public boolean hasCapability(final Capability<?> capability, final EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
 			return true;
-		return super.hasCapability(capability, facing);
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(final Capability<T> capability, final EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-			return (T) this.handler;
+			return (T)handler;
 		return super.getCapability(capability, facing);
 	}
 	
