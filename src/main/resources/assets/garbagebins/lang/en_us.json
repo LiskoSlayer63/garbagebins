@@ -1,5 +1,5 @@
 {
-	"block.garbagebins.garbagebin_item": "Garbage Bin",
-	"block.garbagebins.garbagebin_fluid": "Fluid Garbage Bin",
-	"block.garbagebins.garbagebin_energy": "Energy Garbage Bin"
+	"block.garbagebins.garbagebin": "Garbage Bin",
+	"block.garbagebins.fluidbin": "Fluid Bin",
+	"block.garbagebins.energybin": "Energy Bin"
 }

@@ -1,0 +1,67 @@
+{
+	"parent": "minecraft:block/block",
+	"textures": {
+		"particle": "minecraft:block/stone",
+		"bottom": "garbagebins:block/fluidbin_bottom",
+		"side": "garbagebins:block/fluidbin_side",
+		"top": "garbagebins:block/fluidbin_top"
+	},
+	"elements": [
+		{
+			"from": [2, 0, 2],
+			"to": [14, 14, 14],
+			"faces": {
+				"north": { "texture": "#side" },
+				"east":  { "texture": "#side" },
+				"south": { "texture": "#side" },
+				"west":  { "texture": "#side" },
+				"up":    { "texture": "#top", "cullface": "up" },
+				"down":  { "texture": "#bottom" }
+			}
+		},
+		{
+			"from": [1, 14, 1],
+			"to": [5, 16, 15],
+			"faces": {
+				"north": { "texture": "#side" },
+				"east":  { "texture": "#side", "cullface": "up" },
+				"south": { "texture": "#side" },
+				"west":  { "texture": "#side" },
+				"up":    { "texture": "#top", "cullface": "up" },
+				"down":  { "texture": "#bottom" }
+			}
+		},
+		{
+			"from": [11, 14, 1],
+			"to": [15, 16, 15],
+			"faces": {
+				"north": { "texture": "#side" },
+				"east":  { "texture": "#side" },
+				"south": { "texture": "#side" },
+				"west":  { "texture": "#side", "cullface": "up" },
+				"up":    { "texture": "#top", "cullface": "up" },
+				"down":  { "texture": "#bottom" }
+			}
+		},
+		{
+			"from": [5, 14, 1],
+			"to": [11, 16, 5],
+			"faces": {
+				"north": { "texture": "#side" },
+				"south": { "texture": "#side", "cullface": "up" },
+				"up":    { "texture": "#top", "cullface": "up" },
+				"down":  { "texture": "#bottom" }
+			}
+		},
+		{
+			"from": [5, 14, 11],
+			"to": [11, 16, 15],
+			"faces": {
+				"north": { "texture": "#side", "cullface": "up" },
+				"south": { "texture": "#side" },
+				"up":    { "texture": "#top", "cullface": "up" },
+				"down":  { "texture": "#bottom" }
+			}
+		}
+	]
+}

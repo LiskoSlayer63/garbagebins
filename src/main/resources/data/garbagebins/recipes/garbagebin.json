@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+	"BCB",
+	"BBB"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:cobblestone_slab"
+    },
+    "B": {
+      "item": "minecraft:cobblestone"
+    }
+    "C": {
+      "item": "minecraft:chest"
+    }
+  },
+  "result": {
+    "item": "garbagebins:garbagebin",
+    "count": 1
+  }
+}

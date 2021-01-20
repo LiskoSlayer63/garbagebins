@@ -1,51 +1,32 @@
-modLoader="javafml" #mandatory
+modLoader="javafml"
+loaderVersion="[35,)"
 
-loaderVersion="[35,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+license="GNU Lesser General Public License v3.0"
+issueTrackerURL="https://github.com/LiskoSlayer63/garbagebins/issues"
 
-license="All rights reserved"
+[[mods]]
+modId="garbagebins"
+version="${file.jarVersion}"
 
-#issueTrackerURL="http://my.issue.tracker/" #optional
-
-[[mods]] #mandatory
-
-modId="garbagebins" #mandatory
-
-version="${file.jarVersion}" #mandatory
-
-displayName="Garbage Bins" #mandatory
-
-#updateJSONURL="http://myurl.me/" #optional
-
-#displayURL="http://example.com/" #optional
-
-logoFile="garbagebins.png" #optional
-
-credits="LiskoSlayer63, LizCraft, Gigabit101" #optional
-
-authors="LiskoSlayer63" #optional
+displayName="Garbage Bins"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/trashcans-reborn"
+logoFile="garbagebins.png"
+authors="LiskoSlayer63"
 
 description='''
-Simple trashcans for items and fluids.
-
-Thanks to Gigabit101 for the original source code and textures.
+Simple garbage bins for items and fluids.
 '''
 
-[[dependencies.garbagebins]] #optional
-    # the modid of the dependency
-    modId="forge" #mandatory
-    # Does this dependency have to exist - if not, ordering below must be specified
-    mandatory=true #mandatory
-    # The version range of the dependency
-    versionRange="[35,)" #mandatory
-    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+[[dependencies.garbagebins]]
+    modId="forge"
+    mandatory=true
+    versionRange="[35,)"
     ordering="NONE"
-    # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
-# Here's another dependency
+	
 [[dependencies.garbagebins]]
     modId="minecraft"
     mandatory=true
-# This version range declares a minimum of the current minecraft version up to but not including the next major version
     versionRange="[1.16.4,1.17)"
     ordering="NONE"
     side="BOTH"

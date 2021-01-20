@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "garbagebins:block/garbagebin",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "garbagebins:block/garbagebin"
+    },
+    "facing=south": {
+      "model": "garbagebins:block/garbagebin",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "garbagebins:block/garbagebin",
+      "y": 270
+    }
+  }
+}
