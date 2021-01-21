@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -133,6 +134,11 @@ public class GarbageBinTileEntity extends TileEntity implements IChestLid, ITick
 	public ITextComponent getDisplayName() 
 	{
 		return new TranslationTextComponent("block.garbagebins.garbagebin");
+	}
+	
+	public void breakBlock()
+	{
+		InventoryHelper.dropInventoryItems(this.world, this.pos, this.inventory);
 	}
 	
 	public void addToGarbageBin(ItemStack stack)

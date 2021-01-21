@@ -5,8 +5,6 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -60,11 +58,8 @@ public class GarbageBinBlock extends BaseBinBlock
 		if (!state.isIn(newState.getBlock())) 
 		{
 			TileEntity tileentity = worldIn.getTileEntity(pos);
-			if (tileentity instanceof IInventory) 
-			{
-				InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory)tileentity);
-				worldIn.updateComparatorOutputLevel(pos, this);
-			}
+			if (tileentity instanceof GarbageBinTileEntity) 
+				((GarbageBinTileEntity)tileentity).breakBlock();
 	        super.onReplaced(state, worldIn, pos, newState, isMoving);
 		}
 	}

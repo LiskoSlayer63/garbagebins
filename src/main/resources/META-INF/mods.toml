@@ -6,7 +6,7 @@ issueTrackerURL="https://github.com/LiskoSlayer63/garbagebins/issues"
 
 [[mods]]
 modId="garbagebins"
-version="${file.jarVersion}"
+version="2.0.0-BETA"
 
 displayName="Garbage Bins"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/trashcans-reborn"
