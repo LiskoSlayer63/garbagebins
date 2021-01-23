@@ -53,19 +53,6 @@ public class GarbageBinBlock extends BaseBinBlock
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) 
-	{
-		if (!state.isIn(newState.getBlock())) 
-		{
-			TileEntity tileentity = worldIn.getTileEntity(pos);
-			if (tileentity instanceof GarbageBinTileEntity) 
-				((GarbageBinTileEntity)tileentity).breakBlock();
-	        super.onReplaced(state, worldIn, pos, newState, isMoving);
-		}
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
 	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) 
 	{
 		super.eventReceived(state, worldIn, pos, id, param);

@@ -11,15 +11,15 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ClientContent 
 {
+	public static void register(IEventBus eventBus)
+	{
+		eventBus.register(ClientContent.class);
+	}
+	
 	@SubscribeEvent
 	public static void onClientSetupEvent(FMLClientSetupEvent event) 
 	{
 		ClientRegistry.bindTileEntityRenderer(CommonContent.GARBAGEBIN_TILEENTITYTYPE, GarbageBinRenderer::new);
 		ScreenManager.registerFactory(CommonContent.GARBAGEBIN_CONTAINER, GarbageBinContainerScreen::new);
-	}
-	
-	public static void register(IEventBus eventBus)
-	{
-		eventBus.register(ClientContent.class);
 	}
 }

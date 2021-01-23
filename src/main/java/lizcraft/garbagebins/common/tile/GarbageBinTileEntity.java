@@ -9,7 +9,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -19,6 +18,8 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -86,9 +87,14 @@ public class GarbageBinTileEntity extends TileEntity implements IChestLid, ITick
 		this.ticksSinceSync++;
 	    this.numPlayersUsing = calculatePlayersUsingSync(this.world, this, this.ticksSinceSync, this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.numPlayersUsing);
 		this.prevLidAngle = this.lidAngle;
+		
+		if (this.numPlayersUsing > 0 && this.lidAngle == 0.0F)
+			this.playSound(CommonContent.GARBAGEBIN_OPEN);
 
 	    if (this.numPlayersUsing == 0 && this.lidAngle > 0.0F || this.numPlayersUsing > 0 && this.lidAngle < 1.0F) 
 	    {
+	    	float oldAngle = this.lidAngle;
+	    	
 	    	if (this.numPlayersUsing > 0)
 	    		this.lidAngle += 0.1F;
 	    	else
@@ -96,6 +102,9 @@ public class GarbageBinTileEntity extends TileEntity implements IChestLid, ITick
 
 	        if (this.lidAngle > 1.0F)
 	            this.lidAngle = 1.0F;
+	        
+	        if (this.lidAngle < 0.5F && oldAngle >= 0.5F)
+	            this.playSound(CommonContent.GARBAGEBIN_CLOSE);
 	        
 	        if (this.lidAngle < 0.0F)
 	        	this.lidAngle = 0.0F;
@@ -120,6 +129,13 @@ public class GarbageBinTileEntity extends TileEntity implements IChestLid, ITick
         return super.receiveClientEvent(id, type);
 	}
 	
+	@Override
+	public void remove() 
+	{
+		this.updateContainingBlockInfo();
+		super.remove();
+	}
+	
 	/*
 	 * CONTAINERPROVIDER OVERRIDES
 	 */
@@ -134,11 +150,6 @@ public class GarbageBinTileEntity extends TileEntity implements IChestLid, ITick
 	public ITextComponent getDisplayName() 
 	{
 		return new TranslationTextComponent("block.garbagebins.garbagebin");
-	}
-	
-	public void breakBlock()
-	{
-		InventoryHelper.dropInventoryItems(this.world, this.pos, this.inventory);
 	}
 	
 	public void addToGarbageBin(ItemStack stack)
@@ -208,6 +219,11 @@ public class GarbageBinTileEntity extends TileEntity implements IChestLid, ITick
 	    }
 
 	    return count;
+	}
+	
+	private void playSound(SoundEvent soundIn) 
+	{
+		this.world.playSound((PlayerEntity)null, this.pos, soundIn, SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
 	}
 	
 	

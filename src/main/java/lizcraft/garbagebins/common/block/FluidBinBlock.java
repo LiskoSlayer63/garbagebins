@@ -10,6 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.IBooleanFunction;
@@ -48,6 +50,8 @@ public class FluidBinBlock extends BaseBinBlock
 			
 			Optional<ItemStack> container = FluidUtil.getFluidHandler(itemStack).map(IFluidHandlerItem::getContainer);
 			player.setHeldItem(handIn, container.get());
+			
+			worldIn.playSound((PlayerEntity)null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 0.5F, 1.0F);
 			
 			return ActionResultType.CONSUME;
 		}

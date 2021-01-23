@@ -1,5 +1,8 @@
 {
 	"block.garbagebins.garbagebin": "Roskakori",
 	"block.garbagebins.fluidbin": "Nesteroskakori",
-	"block.garbagebins.energybin": "Energiaroskakori"
+	"block.garbagebins.energybin": "Energiaroskakori",
+	
+	"subtitles.block.garbagebins.garbagebin.close": "Roskakori sulkeutuu",
+	"subtitles.block.garbagebins.garbagebin.open": "Roskakori avautuu"
 }

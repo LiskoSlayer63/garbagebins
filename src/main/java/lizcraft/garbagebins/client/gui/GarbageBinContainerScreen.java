@@ -12,7 +12,7 @@ import net.minecraft.util.text.ITextComponent;
 
 public class GarbageBinContainerScreen extends ContainerScreen<GarbageBinContainer> 
 {
-	private static final ResourceLocation GARBAGEBIN_GUI_TEXTURE = new ResourceLocation(GarbageBins.MOD_ID, "textures/gui/container/garbagebin.png");
+	private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(GarbageBins.MOD_ID, "textures/gui/container/garbagebin.png");
 	
 	public GarbageBinContainerScreen(GarbageBinContainer container, PlayerInventory inv, ITextComponent titleIn) 
 	{
@@ -35,7 +35,7 @@ public class GarbageBinContainerScreen extends ContainerScreen<GarbageBinContain
 	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) 
 	{
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-	    this.minecraft.getTextureManager().bindTexture(GARBAGEBIN_GUI_TEXTURE);
+	    this.minecraft.getTextureManager().bindTexture(GUI_TEXTURE);
 
 	    int edgeSpacingX = (this.width - this.xSize) / 2;
 	    int edgeSpacingY = (this.height - this.ySize) / 2;

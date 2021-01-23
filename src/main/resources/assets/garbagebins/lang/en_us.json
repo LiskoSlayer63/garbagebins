@@ -1,5 +1,8 @@
 {
 	"block.garbagebins.garbagebin": "Garbage Bin",
 	"block.garbagebins.fluidbin": "Fluid Bin",
-	"block.garbagebins.energybin": "Energy Bin"
+	"block.garbagebins.energybin": "Energy Bin",
+	
+	"subtitles.block.garbagebins.garbagebin.close": "Garbage Bin closes",
+	"subtitles.block.garbagebins.garbagebin.open": "Garbage Bin opens"
 }

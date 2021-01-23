@@ -1,0 +1,21 @@
+{
+	"garbagebin_open": {
+		"category": "block",
+		"subtitle": "subtitles.block.garbagebins.garbagebin.open",
+		"sounds": [ 
+			"garbagebins:block/garbagebin/open1",
+			"garbagebins:block/garbagebin/open2",
+			"garbagebins:block/garbagebin/open3"
+		]
+	},
+	"garbagebin_close": {
+		"category": "block",
+		"subtitle": "subtitles.block.garbagebins.garbagebin.close",
+		"sounds": [ 
+			"garbagebins:block/garbagebin/close1",
+			"garbagebins:block/garbagebin/close2",
+			"garbagebins:block/garbagebin/close3"
+		],
+        "volume": 0.5
+	}
+}

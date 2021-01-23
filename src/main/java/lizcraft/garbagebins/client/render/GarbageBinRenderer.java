@@ -34,15 +34,13 @@ public class GarbageBinRenderer extends TileEntityRenderer<GarbageBinTileEntity>
 	public void render(GarbageBinTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) 
 	{
 		World world = tileEntityIn.getWorld();
-	    boolean flag = world != null;
-	    
-	    BlockState blockstate = flag ? tileEntityIn.getBlockState() : CommonContent.GARBAGEBIN_BLOCK.getDefaultState().with(GarbageBinBlock.FACING, Direction.SOUTH);
+	    BlockState blockstate = world != null ? tileEntityIn.getBlockState() : CommonContent.GARBAGEBIN_BLOCK.getDefaultState().with(GarbageBinBlock.FACING, Direction.SOUTH);
 		
 		matrixStackIn.push();
 		
-		float f = blockstate.get(ChestBlock.FACING).getHorizontalAngle();
+		float rotAngle = blockstate.get(ChestBlock.FACING).getHorizontalAngle();
         matrixStackIn.translate(0.5D, 0.5D, 0.5D);
-        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(-f));
+        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(-rotAngle));
         matrixStackIn.translate(-0.5D, -0.5D, -0.5D);
 
         float lidAngle = 1.0F - tileEntityIn.getLidAngle(partialTicks);
@@ -70,7 +68,7 @@ public class GarbageBinRenderer extends TileEntityRenderer<GarbageBinTileEntity>
 
 		public GarbageBinModel() 
 		{
-			super(RenderType::getEntityTranslucent);
+			super(RenderType::getEntityCutout);
 			
 			textureWidth = 64;
 			textureHeight = 64;

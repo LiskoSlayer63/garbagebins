@@ -1,5 +1,6 @@
 package lizcraft.garbagebins.common;
 
+import lizcraft.garbagebins.GarbageBins;
 import lizcraft.garbagebins.client.render.ItemStackRenderer;
 import lizcraft.garbagebins.common.block.FluidBinBlock;
 import lizcraft.garbagebins.common.block.GarbageBinBlock;
@@ -15,6 +16,8 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
@@ -34,6 +37,9 @@ public class CommonContent
 	
 	public static ContainerType<GarbageBinContainer> GARBAGEBIN_CONTAINER;
 	
+	public static SoundEvent GARBAGEBIN_OPEN;
+	public static SoundEvent GARBAGEBIN_CLOSE;
+	
 	public static void init()
 	{
 		// Initialize blocks
@@ -41,13 +47,17 @@ public class CommonContent
 		GARBAGEBIN_BLOCK = new GarbageBinBlock(
 				Block.Properties.create(Material.ROCK, MaterialColor.GRAY).
 				sound(SoundType.METAL).
-				harvestTool(ToolType.PICKAXE)
+				harvestTool(ToolType.PICKAXE).
+				setRequiresTool().
+				hardnessAndResistance(3.5F)
 				).setRegistryName("garbagebin");
 
 		FLUIDBIN_BLOCK = new FluidBinBlock(
 				Block.Properties.create(Material.ROCK, MaterialColor.GRAY).
 				sound(SoundType.METAL).
-				harvestTool(ToolType.PICKAXE)
+				harvestTool(ToolType.PICKAXE).
+				setRequiresTool().
+				hardnessAndResistance(3.5F)
 				).setRegistryName("fluidbin");
 		
 		
@@ -76,6 +86,12 @@ public class CommonContent
 		
 		GARBAGEBIN_CONTAINER = IForgeContainerType.create(GarbageBinContainer::new);
 		GARBAGEBIN_CONTAINER.setRegistryName(GARBAGEBIN_BLOCK.getRegistryName());
+		
+		
+		// Initialize sounds
+		
+		GARBAGEBIN_OPEN = new SoundEvent(new ResourceLocation(GarbageBins.MOD_ID, "garbagebin_open")).setRegistryName("garbagebin_open");
+		GARBAGEBIN_CLOSE = new SoundEvent(new ResourceLocation(GarbageBins.MOD_ID, "garbagebin_close")).setRegistryName("garbagebin_close");
 	}
 	
 	public static void register(IEventBus eventBus)
@@ -105,8 +121,15 @@ public class CommonContent
 	}
 
 	@SubscribeEvent
-	public static void registerContainers(final RegistryEvent.Register<ContainerType<?>> event)
+	public static void onContainersRegistration(final RegistryEvent.Register<ContainerType<?>> event)
 	{
 		event.getRegistry().register(GARBAGEBIN_CONTAINER);
+	}
+	
+	@SubscribeEvent
+	public static void onSoundEventsRegistration(final RegistryEvent.Register<SoundEvent> event) 
+	{
+    	event.getRegistry().register(GARBAGEBIN_OPEN);	
+    	event.getRegistry().register(GARBAGEBIN_CLOSE);
 	}
 }

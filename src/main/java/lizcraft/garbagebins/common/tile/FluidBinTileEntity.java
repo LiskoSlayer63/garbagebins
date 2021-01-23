@@ -34,6 +34,13 @@ public class FluidBinTileEntity extends TileEntity implements ICapabilityProvide
 		return super.getCapability(capability, facing);
 	}
 	
+	@Override
+	public void remove() 
+	{
+		this.updateContainingBlockInfo();
+		super.remove();
+	}
+	
 	
 	/*
 	 * FLUID HANDLER FOR AUTOMATION
