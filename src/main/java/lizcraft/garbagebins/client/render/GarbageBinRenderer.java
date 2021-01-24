@@ -3,7 +3,7 @@ package lizcraft.garbagebins.client.render;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import lizcraft.garbagebins.GarbageBins;
+import lizcraft.garbagebins.client.ClientContent;
 import lizcraft.garbagebins.common.CommonContent;
 import lizcraft.garbagebins.common.block.GarbageBinBlock;
 import lizcraft.garbagebins.common.tile.GarbageBinTileEntity;
@@ -13,16 +13,16 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.model.RenderMaterial;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 
 public class GarbageBinRenderer extends TileEntityRenderer<GarbageBinTileEntity> 
 {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(GarbageBins.MOD_ID, "textures/entity/garbagebin/normal.png");
 	private static final GarbageBinModel MODEL = new GarbageBinModel();
 	
 	public GarbageBinRenderer(TileEntityRendererDispatcher rendererDispatcherIn) 
@@ -46,10 +46,18 @@ public class GarbageBinRenderer extends TileEntityRenderer<GarbageBinTileEntity>
         float lidAngle = 1.0F - tileEntityIn.getLidAngle(partialTicks);
         lidAngle = 1.0F - lidAngle * lidAngle * lidAngle;
         
-		IVertexBuilder renderBuffer = bufferIn.getBuffer(MODEL.getRenderType(TEXTURE));
+        RenderMaterial renderMaterial = this.getRenderMaterial();
+        IVertexBuilder renderBuffer = renderMaterial.getBuffer(bufferIn, RenderType::getEntityCutout);
+        
 	    MODEL.render(matrixStackIn, renderBuffer, combinedLightIn, combinedOverlayIn, lidAngle);
 	    
 	    matrixStackIn.pop();
+	}
+	
+	@SuppressWarnings("deprecation")
+	private RenderMaterial getRenderMaterial()
+	{
+		return new RenderMaterial(AtlasTexture.LOCATION_BLOCKS_TEXTURE, ClientContent.GARBAGEBIN_TEXTURE);
 	}
 	
 	

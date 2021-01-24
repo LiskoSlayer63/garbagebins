@@ -45,19 +45,17 @@ public class CommonContent
 		// Initialize blocks
 		
 		GARBAGEBIN_BLOCK = new GarbageBinBlock(
-				Block.Properties.create(Material.ROCK, MaterialColor.GRAY).
+				Block.Properties.create(Material.IRON, MaterialColor.GRAY).
 				sound(SoundType.METAL).
 				harvestTool(ToolType.PICKAXE).
-				setRequiresTool().
-				hardnessAndResistance(3.5F)
+				hardnessAndResistance(2.5F)
 				).setRegistryName("garbagebin");
 
 		FLUIDBIN_BLOCK = new FluidBinBlock(
-				Block.Properties.create(Material.ROCK, MaterialColor.GRAY).
+				Block.Properties.create(Material.IRON, MaterialColor.GRAY).
 				sound(SoundType.METAL).
 				harvestTool(ToolType.PICKAXE).
-				setRequiresTool().
-				hardnessAndResistance(3.5F)
+				hardnessAndResistance(2.5F)
 				).setRegistryName("fluidbin");
 		
 		
