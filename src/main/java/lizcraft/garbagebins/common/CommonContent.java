@@ -29,8 +29,8 @@ public class CommonContent
 	public static Block GARBAGEBIN_BLOCK;
 	public static Block FLUIDBIN_BLOCK;
 	
-	public static BlockItem GARBAGEBIN_ITEM;
-	public static BlockItem FLUIDBIN_ITEM;
+	public static Item GARBAGEBIN_ITEM;
+	public static Item FLUIDBIN_ITEM;
 
 	public static TileEntityType<GarbageBinTileEntity> GARBAGEBIN_TILEENTITYTYPE;
 	public static TileEntityType<FluidBinTileEntity> FLUIDBIN_TILEENTITYTYPE;
@@ -39,11 +39,16 @@ public class CommonContent
 	
 	public static SoundEvent GARBAGEBIN_OPEN;
 	public static SoundEvent GARBAGEBIN_CLOSE;
+
 	
-	public static void init()
+	public static void register(IEventBus eventBus)
 	{
-		// Initialize blocks
-		
+		eventBus.register(CommonContent.class);
+	}
+
+	@SubscribeEvent
+	public static void onBlocksRegistration(final RegistryEvent.Register<Block> event) 
+	{
 		GARBAGEBIN_BLOCK = new GarbageBinBlock(
 				Block.Properties.create(Material.IRON, MaterialColor.GRAY).
 				sound(SoundType.METAL).
@@ -59,47 +64,6 @@ public class CommonContent
 				).setRegistryName("fluidbin");
 		
 		
-		// Initialize entity types
-		
-		GARBAGEBIN_TILEENTITYTYPE = TileEntityType.Builder.create(GarbageBinTileEntity::new, GARBAGEBIN_BLOCK).build(null);
-		GARBAGEBIN_TILEENTITYTYPE.setRegistryName(GARBAGEBIN_BLOCK.getRegistryName());
-		
-		FLUIDBIN_TILEENTITYTYPE = TileEntityType.Builder.create(FluidBinTileEntity::new, FLUIDBIN_BLOCK).build(null);
-		FLUIDBIN_TILEENTITYTYPE.setRegistryName(FLUIDBIN_BLOCK.getRegistryName());
-		
-		
-		// Initialize items
-		
-		GARBAGEBIN_ITEM = (BlockItem) new BlockItem(GARBAGEBIN_BLOCK, new Item.Properties().
-				group(ItemGroup.DECORATIONS).
-				setISTER(() -> () -> ItemStackRenderer.INSTANCE)
-				).setRegistryName(GARBAGEBIN_BLOCK.getRegistryName());
-		
-		FLUIDBIN_ITEM = (BlockItem) new BlockItem(FLUIDBIN_BLOCK, new Item.Properties().
-				group(ItemGroup.DECORATIONS)
-				).setRegistryName(FLUIDBIN_BLOCK.getRegistryName());
-		
-		
-		// Initialize containers
-		
-		GARBAGEBIN_CONTAINER = IForgeContainerType.create(GarbageBinContainer::new);
-		GARBAGEBIN_CONTAINER.setRegistryName(GARBAGEBIN_BLOCK.getRegistryName());
-		
-		
-		// Initialize sounds
-		
-		GARBAGEBIN_OPEN = new SoundEvent(new ResourceLocation(GarbageBins.MOD_ID, "garbagebin_open")).setRegistryName("garbagebin_open");
-		GARBAGEBIN_CLOSE = new SoundEvent(new ResourceLocation(GarbageBins.MOD_ID, "garbagebin_close")).setRegistryName("garbagebin_close");
-	}
-	
-	public static void register(IEventBus eventBus)
-	{
-		eventBus.register(CommonContent.class);
-	}
-
-	@SubscribeEvent
-	public static void onBlocksRegistration(final RegistryEvent.Register<Block> event) 
-	{
     	event.getRegistry().register(GARBAGEBIN_BLOCK);	
     	event.getRegistry().register(FLUIDBIN_BLOCK);
 	}
@@ -107,6 +71,16 @@ public class CommonContent
 	@SubscribeEvent
 	public static void onItemsRegistration(final RegistryEvent.Register<Item> event) 
 	{
+		GARBAGEBIN_ITEM = new BlockItem(GARBAGEBIN_BLOCK, new Item.Properties().
+				group(ItemGroup.DECORATIONS).
+				setISTER(() -> () -> ItemStackRenderer.INSTANCE)
+				).setRegistryName(GARBAGEBIN_BLOCK.getRegistryName());
+		
+		FLUIDBIN_ITEM = new BlockItem(FLUIDBIN_BLOCK, new Item.Properties().
+				group(ItemGroup.DECORATIONS)
+				).setRegistryName(FLUIDBIN_BLOCK.getRegistryName());
+		
+		
 		event.getRegistry().register(GARBAGEBIN_ITEM);
 		event.getRegistry().register(FLUIDBIN_ITEM);
 	}
@@ -114,6 +88,13 @@ public class CommonContent
 	@SubscribeEvent
 	public static void onTileEntityTypeRegistration(final RegistryEvent.Register<TileEntityType<?>> event) 
 	{
+		GARBAGEBIN_TILEENTITYTYPE = TileEntityType.Builder.create(GarbageBinTileEntity::new, GARBAGEBIN_BLOCK).build(null);
+		GARBAGEBIN_TILEENTITYTYPE.setRegistryName(GARBAGEBIN_BLOCK.getRegistryName());
+		
+		FLUIDBIN_TILEENTITYTYPE = TileEntityType.Builder.create(FluidBinTileEntity::new, FLUIDBIN_BLOCK).build(null);
+		FLUIDBIN_TILEENTITYTYPE.setRegistryName(FLUIDBIN_BLOCK.getRegistryName());
+		
+		
 		event.getRegistry().register(GARBAGEBIN_TILEENTITYTYPE);
 		event.getRegistry().register(FLUIDBIN_TILEENTITYTYPE);
 	}
@@ -121,12 +102,20 @@ public class CommonContent
 	@SubscribeEvent
 	public static void onContainersRegistration(final RegistryEvent.Register<ContainerType<?>> event)
 	{
+		GARBAGEBIN_CONTAINER = IForgeContainerType.create(GarbageBinContainer::new);
+		GARBAGEBIN_CONTAINER.setRegistryName(GARBAGEBIN_BLOCK.getRegistryName());
+		
+		
 		event.getRegistry().register(GARBAGEBIN_CONTAINER);
 	}
 	
 	@SubscribeEvent
 	public static void onSoundEventsRegistration(final RegistryEvent.Register<SoundEvent> event) 
 	{
+		GARBAGEBIN_OPEN = new SoundEvent(new ResourceLocation(GarbageBins.MOD_ID, "garbagebin_open")).setRegistryName("garbagebin_open");
+		GARBAGEBIN_CLOSE = new SoundEvent(new ResourceLocation(GarbageBins.MOD_ID, "garbagebin_close")).setRegistryName("garbagebin_close");
+		
+		
     	event.getRegistry().register(GARBAGEBIN_OPEN);	
     	event.getRegistry().register(GARBAGEBIN_CLOSE);
 	}

@@ -26,8 +26,6 @@ public class GarbageBins
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, GarbageBinsConfig.CLIENT_CONFIG);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GarbageBinsConfig.COMMON_CONFIG);
 		
-		CommonContent.init();
-		
 		CommonContent.register(modEventBus);
 		ClientContent.register(modEventBus);
 	}
