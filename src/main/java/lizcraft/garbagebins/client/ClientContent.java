@@ -41,6 +41,6 @@ public class ClientContent
         
         boolean added = event.addSprite(GARBAGEBIN_TEXTURE);
      
-        Logger.info("Added texture to atlas: " + added);
+        Logger.info((added ? "Added texture to atlas: " : "Failed to add texture to atlas: ") + GARBAGEBIN_TEXTURE);
     }
 }

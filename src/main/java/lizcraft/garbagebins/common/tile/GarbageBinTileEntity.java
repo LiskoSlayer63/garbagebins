@@ -223,7 +223,7 @@ public class GarbageBinTileEntity extends TileEntity implements IChestLid, ITick
 	
 	private void playSound(SoundEvent soundIn) 
 	{
-		this.world.playSound((PlayerEntity)null, this.pos, soundIn, SoundCategory.BLOCKS, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
+		this.world.playSound((PlayerEntity)null, this.pos, soundIn, SoundCategory.BLOCKS, 0.7F, this.world.rand.nextFloat() * 0.1F + 0.9F);
 	}
 	
 	

@@ -22,7 +22,6 @@ public class GarbageBins
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		
 		Logger.init(LogManager.getLogger(GarbageBins.class));
-		Logger.enableDebug(true);
 		
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, GarbageBinsConfig.CLIENT_CONFIG);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GarbageBinsConfig.COMMON_CONFIG);

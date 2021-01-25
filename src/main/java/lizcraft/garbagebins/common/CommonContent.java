@@ -59,18 +59,6 @@ public class CommonContent
 				).setRegistryName("fluidbin");
 		
 		
-		// Initialize items
-		
-		GARBAGEBIN_ITEM = (BlockItem) new BlockItem(GARBAGEBIN_BLOCK, new Item.Properties().
-				group(ItemGroup.DECORATIONS).
-				setISTER(() -> ItemStackRenderer::new)
-				).setRegistryName(GARBAGEBIN_BLOCK.getRegistryName());
-		
-		FLUIDBIN_ITEM = (BlockItem) new BlockItem(FLUIDBIN_BLOCK, new Item.Properties().
-				group(ItemGroup.DECORATIONS)
-				).setRegistryName(FLUIDBIN_BLOCK.getRegistryName());
-		
-		
 		// Initialize entity types
 		
 		GARBAGEBIN_TILEENTITYTYPE = TileEntityType.Builder.create(GarbageBinTileEntity::new, GARBAGEBIN_BLOCK).build(null);
@@ -78,6 +66,18 @@ public class CommonContent
 		
 		FLUIDBIN_TILEENTITYTYPE = TileEntityType.Builder.create(FluidBinTileEntity::new, FLUIDBIN_BLOCK).build(null);
 		FLUIDBIN_TILEENTITYTYPE.setRegistryName(FLUIDBIN_BLOCK.getRegistryName());
+		
+		
+		// Initialize items
+		
+		GARBAGEBIN_ITEM = (BlockItem) new BlockItem(GARBAGEBIN_BLOCK, new Item.Properties().
+				group(ItemGroup.DECORATIONS).
+				setISTER(() -> () -> ItemStackRenderer.INSTANCE)
+				).setRegistryName(GARBAGEBIN_BLOCK.getRegistryName());
+		
+		FLUIDBIN_ITEM = (BlockItem) new BlockItem(FLUIDBIN_BLOCK, new Item.Properties().
+				group(ItemGroup.DECORATIONS)
+				).setRegistryName(FLUIDBIN_BLOCK.getRegistryName());
 		
 		
 		// Initialize containers
