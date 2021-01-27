@@ -5,7 +5,9 @@ import org.apache.logging.log4j.LogManager;
 import lizcraft.garbagebins.client.ClientContent;
 import lizcraft.garbagebins.common.CommonContent;
 import lizcraft.garbagebins.utils.Logger;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -21,6 +23,6 @@ public class GarbageBins
 		Logger.init(LogManager.getLogger(GarbageBins.class));
 		
 		CommonContent.register(modEventBus);
-		ClientContent.register(modEventBus);
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientContent.register(modEventBus));
 	}
 }

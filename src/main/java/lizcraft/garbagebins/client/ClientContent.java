@@ -36,11 +36,11 @@ public class ClientContent
     {
 		ResourceLocation stitching = event.getMap().getTextureLocation();
 		
-        if(!stitching.equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE))
-            return;
+		if(!stitching.equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE))
+			return;
         
-        boolean added = event.addSprite(GARBAGEBIN_TEXTURE);
+		boolean added = event.addSprite(GARBAGEBIN_TEXTURE);
      
-        Logger.info((added ? "Added texture to atlas: " : "Failed to add texture to atlas: ") + GARBAGEBIN_TEXTURE);
+		Logger.info((added ? "Added texture to atlas: " : "Failed to add texture to atlas: ") + GARBAGEBIN_TEXTURE);
     }
 }

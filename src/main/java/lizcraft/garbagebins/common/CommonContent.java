@@ -7,6 +7,7 @@ import lizcraft.garbagebins.common.block.GarbageBinBlock;
 import lizcraft.garbagebins.common.gui.GarbageBinContainer;
 import lizcraft.garbagebins.common.tile.FluidBinTileEntity;
 import lizcraft.garbagebins.common.tile.GarbageBinTileEntity;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -50,22 +51,22 @@ public class CommonContent
 	public static void onBlocksRegistration(final RegistryEvent.Register<Block> event) 
 	{
 		GARBAGEBIN_BLOCK = new GarbageBinBlock(
-				Block.Properties.create(Material.IRON, MaterialColor.GRAY).
+				AbstractBlock.Properties.create(Material.IRON, MaterialColor.GRAY).
 				sound(SoundType.METAL).
 				harvestTool(ToolType.PICKAXE).
 				hardnessAndResistance(2.5F)
 				).setRegistryName("garbagebin");
 
 		FLUIDBIN_BLOCK = new FluidBinBlock(
-				Block.Properties.create(Material.IRON, MaterialColor.GRAY).
+				AbstractBlock.Properties.create(Material.IRON, MaterialColor.GRAY).
 				sound(SoundType.METAL).
 				harvestTool(ToolType.PICKAXE).
 				hardnessAndResistance(2.5F)
 				).setRegistryName("fluidbin");
 		
 		
-    	event.getRegistry().register(GARBAGEBIN_BLOCK);	
-    	event.getRegistry().register(FLUIDBIN_BLOCK);
+		event.getRegistry().register(GARBAGEBIN_BLOCK);	
+		event.getRegistry().register(FLUIDBIN_BLOCK);
 	}
 
 	@SubscribeEvent
@@ -116,7 +117,7 @@ public class CommonContent
 		GARBAGEBIN_CLOSE = new SoundEvent(new ResourceLocation(GarbageBins.MOD_ID, "garbagebin_close")).setRegistryName("garbagebin_close");
 		
 		
-    	event.getRegistry().register(GARBAGEBIN_OPEN);	
-    	event.getRegistry().register(GARBAGEBIN_CLOSE);
+		event.getRegistry().register(GARBAGEBIN_OPEN);	
+		event.getRegistry().register(GARBAGEBIN_CLOSE);
 	}
 }
