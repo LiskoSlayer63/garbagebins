@@ -20,11 +20,9 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -84,8 +82,9 @@ public class GarbageBinTileEntity extends TileEntity implements IChestLid, ITick
 	@Override
 	public void tick() 
 	{
-		this.ticksSinceSync++;
-	    this.numPlayersUsing = calculatePlayersUsingSync(this.world, this, this.ticksSinceSync, this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.numPlayersUsing);
+		if (++this.ticksSinceSync % 20 * 4 == 0) 
+			this.world.addBlockEvent(this.pos, this.getBlockState().getBlock(), 1, this.numPlayersUsing);
+		
 		this.prevLidAngle = this.lidAngle;
 		
 		if (this.numPlayersUsing > 0 && this.lidAngle == 0.0F)
@@ -161,10 +160,7 @@ public class GarbageBinTileEntity extends TileEntity implements IChestLid, ITick
 	{
 		if (!player.isSpectator())
 		{
-			if (this.numPlayersUsing < 0) 
-				this.numPlayersUsing = 0;
-
-			++this.numPlayersUsing;
+			this.numPlayersUsing++;
 			this.onOpenOrClose();
 		}
 	}
@@ -173,7 +169,7 @@ public class GarbageBinTileEntity extends TileEntity implements IChestLid, ITick
 	{
 		if (!player.isSpectator()) 
 		{
-			--this.numPlayersUsing;
+			this.numPlayersUsing--;
 	        this.onOpenOrClose();
 	    }
 	}
@@ -194,31 +190,6 @@ public class GarbageBinTileEntity extends TileEntity implements IChestLid, ITick
 	    	this.world.addBlockEvent(this.pos, block, 1, this.numPlayersUsing);
 	    	this.world.notifyNeighborsOfStateChange(this.pos, block);
 	    }
-	}
-	
-	private static int calculatePlayersUsingSync(World worldIn, TileEntity tileEntity, int ticksSince, int posX, int posY, int posZ, int playersUsing) 
-	{
-		if (!worldIn.isRemote && playersUsing != 0 && (ticksSince + posX + posY + posZ) % 200 == 0)
-			playersUsing = calculatePlayersUsing(worldIn, tileEntity, posX, posY, posZ);
-
-	    return playersUsing;
-	}
-
-	public static int calculatePlayersUsing(World worldIn, TileEntity tileEntity, int posX, int posY, int posZ) 
-	{
-		int count = 0;
-
-	    for(PlayerEntity playerentity : worldIn.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(posX - 5.0D, posY - 5.0D, posZ - 5.0D, posX + 1 + 5.0D, posY + 1 + 5.0D, posZ + 1 + 5.0D))) 
-	    {
-	    	if (playerentity.openContainer instanceof GarbageBinContainer) 
-	    	{
-	    		TileEntity containerEntity = ((GarbageBinContainer)playerentity.openContainer).getTileEntity();
-	            if (containerEntity == tileEntity)
-	            	count++;
-	        }
-	    }
-
-	    return count;
 	}
 	
 	private void playSound(SoundEvent soundIn) 

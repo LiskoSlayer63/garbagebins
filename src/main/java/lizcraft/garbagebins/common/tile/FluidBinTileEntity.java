@@ -14,7 +14,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public class FluidBinTileEntity extends TileEntity implements ICapabilityProvider
 {
-    private final LazyOptional<IFluidHandler> handler = LazyOptional.of(() -> new FluidBinHandler(this));
+    private final LazyOptional<IFluidHandler> handler = LazyOptional.of(() -> new FluidBinHandler());
 	
 	public FluidBinTileEntity(TileEntityType<?> tileEntityTypeIn) 
 	{
@@ -48,13 +48,6 @@ public class FluidBinTileEntity extends TileEntity implements ICapabilityProvide
 	
 	public static class FluidBinHandler implements IFluidHandler
 	{
-		FluidBinTileEntity tileEntity;
-		
-		public FluidBinHandler(FluidBinTileEntity tileEntity)
-		{
-			this.tileEntity = tileEntity;
-		}
-
 		@Override
 		public int getTanks() 
 		{

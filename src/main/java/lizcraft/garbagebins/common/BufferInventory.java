@@ -48,9 +48,8 @@ public class BufferInventory implements IInventory
 	@Override
 	public void clear() 
 	{
-		for (ItemStack stack : this.bufferContents)
-			if (!stack.isEmpty())
-				stack = ItemStack.EMPTY;
+		for (int i = 0; i < this.getSizeInventory(); i++)
+			this.setInventorySlotContents(i, ItemStack.EMPTY);
 	}
 
 	@Override

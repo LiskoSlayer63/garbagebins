@@ -112,6 +112,6 @@ public class BaseBinBlock extends Block  implements IWaterLoggable
 	{
 		boolean flag = !worldIn.isBlockPowered(pos);
 		if (flag != state.get(ENABLED)) 
-			worldIn.setBlockState(pos, state.with(ENABLED, Boolean.valueOf(flag)), Constants.BlockFlags.NO_RERENDER);
+			worldIn.setBlockState(pos, state.with(ENABLED, Boolean.valueOf(flag)), Constants.BlockFlags.NO_RERENDER | Constants.BlockFlags.NOTIFY_NEIGHBORS);
 	}
 }
