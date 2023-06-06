@@ -1,62 +1,78 @@
 package lizcraft.garbagebins.common.block;
 
-import lizcraft.garbagebins.common.tile.GarbageBinTileEntity;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import javax.annotation.Nullable;
+
+import lizcraft.garbagebins.common.CommonContent;
+import lizcraft.garbagebins.common.block.entity.GarbageBinBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
 
 public class GarbageBinBlock extends BaseBinBlock
 {
+	
 	public GarbageBinBlock(Properties properties) 
 	{
 		super(properties);
 	}
+
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) 
+	{
+		return new GarbageBinBlockEntity(pos, state);
+	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) 
+	public RenderShape getRenderShape(BlockState p_49232_) 
 	{
-		if (worldIn.isRemote) 
-			return ActionResultType.SUCCESS;
+		return RenderShape.ENTITYBLOCK_ANIMATED;
+	}
+	
+	@Override
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) 
+	{
+		if (level.isClientSide)
+			return InteractionResult.SUCCESS;
 		
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-		if (tileentity instanceof GarbageBinTileEntity && !ChestBlock.isBlocked(worldIn, pos))
-			player.openContainer((GarbageBinTileEntity)tileentity);
-	  
-		return ActionResultType.CONSUME;
+		if (level.getBlockEntity(pos) instanceof GarbageBinBlockEntity garbageBin && !isBlockedByBlock(level, pos))
+			NetworkHooks.openScreen((ServerPlayer)player, garbageBin, pos);
+		
+		return InteractionResult.CONSUME;
 	}
-
+	
+	@Nullable
 	@Override
-	public boolean hasTileEntity(BlockState state)
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) 
 	{
-		return true;
+		return level.isClientSide ? createTickerHelper(blockEntityType, CommonContent.GARBAGEBIN_BLOCKENTITY_TYPE.get(), GarbageBinBlockEntity::lidAnimateTick) : null;
 	}
-
+	
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader worldIn) 
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) 
 	{
-		return new GarbageBinTileEntity();
+		BlockEntity blockentity = level.getBlockEntity(pos);
+		if (blockentity instanceof GarbageBinBlockEntity garbageBin) 
+		{
+			garbageBin.recheckOpen();
+		}
 	}
-
-	@Override
-	public BlockRenderType getRenderType(BlockState state) 
+	
+	private static boolean isBlockedByBlock(BlockGetter getter, BlockPos pos) 
 	{
-		return BlockRenderType.ENTITYBLOCK_ANIMATED;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean eventReceived(BlockState state, World worldIn, BlockPos pos, int id, int param) 
-	{
-		super.eventReceived(state, worldIn, pos, id, param);
-		TileEntity tileentity = worldIn.getTileEntity(pos);
-		return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
+		BlockPos blockpos = pos.above();
+		return getter.getBlockState(blockpos).isRedstoneConductor(getter, blockpos);
 	}
 }

@@ -1,12 +1,11 @@
 package lizcraft.garbagebins.common;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
 
 /*
  *   Buffered inventory
@@ -16,44 +15,36 @@ import net.minecraft.util.NonNullList;
  * - You shouldn't put items directly to the buffer using setInventorySlotContents() and instead always use addToBuffer (except when autofilling)
  * - If buffer somehow got out of sync or there's empty slots between stacks, you can use arrangeBuffer()
  */
-public class BufferInventory implements IInventory
+public class SequencedContainer implements Container
 {
 	private final NonNullList<ItemStack> bufferContents;
-	private final TileEntity tileEntity;
 	
-	public BufferInventory(int size)
+	public SequencedContainer(int size)
 	{
 		this.bufferContents = NonNullList.withSize(size - 1, ItemStack.EMPTY);
-		this.tileEntity = null;
 	}
 	
-	public BufferInventory(TileEntity master, int size)
+	public void load(CompoundTag nbt) //read
 	{
-		this.bufferContents = NonNullList.withSize(size - 1, ItemStack.EMPTY);
-		this.tileEntity = master;
+		ContainerHelper.loadAllItems(nbt, this.bufferContents);
 	}
 	
-	public void read(CompoundNBT nbt)
-	{
-		ItemStackHelper.loadAllItems(nbt, this.bufferContents);
-	}
-	
-	public CompoundNBT write(CompoundNBT compound) 
+	public CompoundTag save(CompoundTag compound) //write
 	{
 		this.arrangeBuffer();
-		ItemStackHelper.saveAllItems(compound, this.bufferContents);
+		ContainerHelper.saveAllItems(compound, this.bufferContents);
 		return compound;
 	}
 
 	@Override
-	public void clear() 
+	public void clearContent() 
 	{
-		for (int i = 0; i < this.getSizeInventory(); i++)
-			this.setInventorySlotContents(i, ItemStack.EMPTY);
+		for (int i = 0; i < this.getContainerSize(); i++)
+			this.setItem(i, ItemStack.EMPTY);
 	}
 
 	@Override
-	public int getSizeInventory() 
+	public int getContainerSize() 
 	{
 		return this.bufferContents.size() + 1;
 	}
@@ -68,32 +59,39 @@ public class BufferInventory implements IInventory
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int index) 
+	public ItemStack getItem(int index) 
 	{
 		if (index > 0 && index <= this.bufferContents.size())
-			return this.bufferContents.get(index - 1);
+			return this.bufferContents.get(index - 1).copy();
 		
 		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public ItemStack decrStackSize(int index, int count) 
+	public ItemStack removeItem(int index, int count) 
 	{
 		if (index > 0 && index <= this.bufferContents.size())
 		{
 			ItemStack stack = this.bufferContents.get(index - 1);
 			
 			if (stack.getCount() == count)
-				return removeStackFromSlot(index);
-			else
-				return ItemStackHelper.getAndSplit(this.bufferContents, index - 1, count);
+				return removeItemNoUpdate(index);
+			else 
+			{
+				ItemStack itemstack = ContainerHelper.removeItem(this.bufferContents, index - 1, count);
+				if (!itemstack.isEmpty()) {
+					this.setChanged();
+				}
+
+				return itemstack;
+			}
 		}
 		
 		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index) 
+	public ItemStack removeItemNoUpdate(int index) 
 	{
 		if (index > 0 && index <= this.bufferContents.size())
 			return this.takeFromBuffer(index - 1);
@@ -102,7 +100,7 @@ public class BufferInventory implements IInventory
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) 
+	public void setItem(int index, ItemStack stack) 
 	{
 		if (index == 0)
 			this.addToBuffer(stack);
@@ -110,19 +108,8 @@ public class BufferInventory implements IInventory
 			this.takeFromBuffer(index - 1);
 		else
 			this.bufferContents.set(index - 1, stack);
-	}
-
-	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) 
-	{
-		return true;
-	}
-	
-	@Override
-	public void markDirty() 
-	{
-		if (this.tileEntity != null)
-			this.tileEntity.markDirty();
+		
+		this.setChanged();
 	}
 
 	/*
@@ -167,5 +154,17 @@ public class BufferInventory implements IInventory
 		}
 			
 		return stack;
+	}
+
+	@Override
+	public void setChanged() 
+	{
+		
+	}
+
+	@Override
+	public boolean stillValid(Player p_18946_) 
+	{
+		return true; 
 	}
 }

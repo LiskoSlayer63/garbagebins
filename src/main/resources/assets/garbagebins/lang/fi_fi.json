@@ -3,6 +3,25 @@
 	"block.garbagebins.fluidbin": "Nesteroskakori",
 	"block.garbagebins.energybin": "Energiaroskakori",
 	
+	"container.garbagebins.filter.label": "Suodatin",
+	
+	"container.garbagebins.settings.title": "Asetukset",
+	"container.garbagebins.tooltip.info": "Paina [Shift] näyttääksesi lisätietoja",
+	
+	"container.garbagebins.redstone.title": "Redstone Ohjaus",
+	"container.garbagebins.redstone.state": "Nykyinen tila: %s",
+	"container.garbagebins.redstone.desc": "Vaihtaa käyttäymistä perustuen redstone signaaliin. \"Normaali\" käyttää samaa logiikkaa kuin Tiputin",
+	"container.garbagebins.redstone.normal": "Normaali",
+	"container.garbagebins.redstone.inverted": "Käänteinen",
+	"container.garbagebins.redstone.disabled": "Älä huomioi",
+	
+	"container.garbagebins.filter.title": "Suodatin",
+	"container.garbagebins.filter.state": "Nykyinen tila: %s",
+	"container.garbagebins.filter.desc": "Vaihtaa suodattimen käyttäymistä. \"Päästölista\" tarkoittaa, että vain suodattimeen täsmäävä sisältö kelpaa.",
+	"container.garbagebins.filter.normal": "Päästölista",
+	"container.garbagebins.filter.inverted": "Estolista",
+	"container.garbagebins.filter.disabled": "Pois päältä",
+	
 	"subtitles.block.garbagebins.garbagebin.close": "Roskakori sulkeutuu",
 	"subtitles.block.garbagebins.garbagebin.open": "Roskakori avautuu"
 }

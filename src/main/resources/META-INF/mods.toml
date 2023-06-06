@@ -1,12 +1,12 @@
 modLoader="javafml"
-loaderVersion="[35,)"
+loaderVersion="[43,)"
 
 license="GNU Lesser General Public License v3.0"
 issueTrackerURL="https://github.com/LiskoSlayer63/garbagebins/issues"
 
 [[mods]]
 modId="garbagebins"
-version="2.0.5"
+version="${file.jarVersion}"
 
 displayName="Garbage Bins"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/trashcans-reborn"
@@ -20,13 +20,13 @@ Simple garbage bins for items and fluids.
 [[dependencies.garbagebins]]
     modId="forge"
     mandatory=true
-    versionRange="[35,)"
+    versionRange="[43,)"
     ordering="NONE"
     side="BOTH"
 	
 [[dependencies.garbagebins]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.4,1.17)"
+    versionRange="[1.19.2,)"
     ordering="NONE"
     side="BOTH"

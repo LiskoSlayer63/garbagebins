@@ -3,6 +3,25 @@
 	"block.garbagebins.fluidbin": "Fluid Bin",
 	"block.garbagebins.energybin": "Energy Bin",
 	
+	"container.garbagebins.filter.label": "Filter",
+	
+	"container.garbagebins.settings.title": "Settings",
+	"container.garbagebins.tooltip.info": "Hold [Shift] for info",
+	
+	"container.garbagebins.redstone.title": "Redstone Control",
+	"container.garbagebins.redstone.state": "Current mode: %s",
+	"container.garbagebins.redstone.desc": "Changes how the bin reacts to redstone signal. \"Normal\" uses same logic as the Hopper.",
+	"container.garbagebins.redstone.normal": "Normal",
+	"container.garbagebins.redstone.inverted": "Inverted",
+	"container.garbagebins.redstone.disabled": "Ignored",
+	
+	"container.garbagebins.filter.title": "Filter",
+	"container.garbagebins.filter.state": "Current mode: %s",
+	"container.garbagebins.filter.desc": "Changes the filter behavior. \"Whitelist\" means that you can only insert items that match the items in the filter.",
+	"container.garbagebins.filter.normal": "Whitelist",
+	"container.garbagebins.filter.inverted": "Blacklist",
+	"container.garbagebins.filter.disabled": "Disabled",
+	
 	"subtitles.block.garbagebins.garbagebin.close": "Garbage Bin closes",
 	"subtitles.block.garbagebins.garbagebin.open": "Garbage Bin opens"
 }

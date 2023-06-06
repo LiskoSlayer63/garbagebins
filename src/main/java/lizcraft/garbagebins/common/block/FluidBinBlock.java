@@ -1,34 +1,37 @@
 package lizcraft.garbagebins.common.block;
 
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import lizcraft.garbagebins.common.tile.FluidBinTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import lizcraft.garbagebins.common.block.entity.FluidBinBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.SoundActions;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+import net.minecraftforge.network.NetworkHooks;
 
-public class FluidBinBlock extends BaseBinBlock 
+public class FluidBinBlock extends BaseBinBlock
 {
-	private static final VoxelShape DRAIN_SHAPE = Block.makeCuboidShape(5.0D, 14.0D, 5.0D, 11.0D, 16.0D, 11.0D);
-	protected static final VoxelShape BASE_SHAPE = VoxelShapes.combineAndSimplify(BaseBinBlock.BASE_SHAPE, DRAIN_SHAPE, IBooleanFunction.ONLY_FIRST);
+	private static final VoxelShape DRAIN_SHAPE = Block.box(5.0D, 14.0D, 5.0D, 11.0D, 16.0D, 11.0D);
+	protected static final VoxelShape BASE_SHAPE = Shapes.join(BaseBinBlock.BASE_SHAPE, DRAIN_SHAPE, BooleanOp.ONLY_FIRST);
 	
 	public FluidBinBlock(Properties properties) 
 	{
@@ -36,44 +39,72 @@ public class FluidBinBlock extends BaseBinBlock
 	}
 	
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) 
-	{
-		if (worldIn.isRemote)
-			return ActionResultType.SUCCESS;
-		
-		ItemStack itemStack = player.getHeldItem(handIn);
-		Optional<FluidStack> fluidStack = FluidUtil.getFluidContained(itemStack);
-		
-		if (fluidStack.isPresent() && !fluidStack.get().isEmpty())
-		{
-			FluidUtil.getFluidHandler(itemStack).map(fluidHandler -> fluidHandler.drain(Integer.MAX_VALUE, FluidAction.EXECUTE));
-			
-			Optional<ItemStack> container = FluidUtil.getFluidHandler(itemStack).map(IFluidHandlerItem::getContainer);
-			player.setHeldItem(handIn, container.get());
-			
-			worldIn.playSound((PlayerEntity)null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 0.5F, 1.0F);
-			
-			return ActionResultType.CONSUME;
-		}
-		
-		return ActionResultType.FAIL;
-	}
-	
-	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) 
+	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) 
 	{
 		return BASE_SHAPE;
 	}
-
+	
 	@Override
-	public boolean hasTileEntity(BlockState state)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) 
 	{
-		return true;
+		if (level.isClientSide)
+			return InteractionResult.SUCCESS;
+		
+		if (level.getBlockEntity(pos) instanceof FluidBinBlockEntity fluidBin)
+		{
+			ServerPlayer sPlayer = (ServerPlayer)player;
+			ItemStack stack = sPlayer.getItemInHand(hand);
+			AtomicBoolean isDrained = new AtomicBoolean();
+			
+			if (fluidBin.getQuickUseState() && !stack.isEmpty() && stack.getItem() != Items.BUCKET)
+			{
+				//if (stack.getItem() == Items.MILK_BUCKET)
+				//{
+				//	sPlayer.setItemInHand(hand, new ItemStack(Items.BUCKET));
+				//	isDrained.set(true);
+				//}
+				//else
+				//{
+					stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent((fluidHandler) -> 
+					{
+						for (int i = 0; i < fluidHandler.getTanks(); i++)
+						{
+							FluidStack fluid = fluidHandler.getFluidInTank(i);
+							if (!fluid.isEmpty())
+							{
+								playSound(level, pos, fluid);
+	
+								fluidHandler.drain(fluid, FluidAction.EXECUTE);
+								isDrained.set(true);
+							}
+						}
+						
+						if (isDrained.get())
+							sPlayer.setItemInHand(hand, fluidHandler.getContainer());
+					});
+				//}
+			}
+			
+			if (!isDrained.get())
+				NetworkHooks.openScreen(sPlayer, fluidBin, pos);
+
+			return InteractionResult.CONSUME;
+		}
+		
+		return InteractionResult.SUCCESS;
 	}
 
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader worldIn) 
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new FluidBinTileEntity();
+		return new FluidBinBlockEntity(pos, state);
+	}
+	
+	private static void playSound(Level level, BlockPos pos, FluidStack fluid)
+	{
+		SoundEvent sound = fluid.getFluid().getFluidType().getSound(fluid, SoundActions.BUCKET_EMPTY);
+		
+		if (sound != null)
+			level.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, sound, SoundSource.BLOCKS, 0.7F, level.random.nextFloat() * 0.1F + 0.9F);
 	}
 }

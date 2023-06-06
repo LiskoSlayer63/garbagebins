@@ -22,10 +22,7 @@ eclipse
 run
 run_client
 run_server
-openCmd.bat
-logs
+textures
 
 # Files from Forge MDK
 forge*changelog.txt
-src/generated
-garbagebins_logo.png

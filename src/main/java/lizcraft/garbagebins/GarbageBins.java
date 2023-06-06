@@ -1,10 +1,11 @@
 package lizcraft.garbagebins;
 
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import lizcraft.garbagebins.client.ClientContent;
 import lizcraft.garbagebins.common.CommonContent;
-import lizcraft.garbagebins.utils.Logger;
+import lizcraft.garbagebins.network.NetworkHandler;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
@@ -15,14 +16,15 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class GarbageBins 
 {
 	public static final String MOD_ID = "garbagebins";
+	public static final Logger LOGGER = LogManager.getLogger(GarbageBins.class);
 	
 	public GarbageBins()
 	{
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		
-		Logger.init(LogManager.getLogger(GarbageBins.class));
-		
 		CommonContent.register(modEventBus);
+		NetworkHandler.register();
+		
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientContent.register(modEventBus));
 	}
 }
